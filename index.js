@@ -2,9 +2,7 @@ const express = require('express');
 const async = require('async');
 const request = require('request');
 
-
-module.exports = {
-  calculateEthPrice: function(buyDate, sellDate, amount) {
+module.exports = function(buyDate, sellDate, amount) {
   	function httpGet(url, callback) {
 	  const options = {
 	    url :  url,
@@ -22,14 +20,16 @@ module.exports = {
 	];
 	async.map(urls, httpGet, function (err, res){
 		if (err) return console.log(err);
-	  	let buyPrice = res[0].ETH.USD;
-		let sellPrice = res[1].ETH.USD;
-	  	let sellPriceAm = sellPrice*amount;
-	  	let buyPriceAm = buyPrice*amount;
-	  	let returnFrom = sellPriceAm-buyPriceAm;
-	  	roi = (returnFrom-buyPriceAm)/buyPriceAm;
-	  	roi = (roi+1)*100;
-		return roi;
+	  	else {
+		  	let buyPrice = res[0].ETH.USD;
+			let sellPrice = res[1].ETH.USD;
+		  	let sellPriceAm = sellPrice*amount;
+		  	let buyPriceAm = buyPrice*amount;
+		  	let returnFrom = sellPriceAm-buyPriceAm;
+		  	let roi = (returnFrom-buyPriceAm)/buyPriceAm;
+		  	roi = (roi+1)*100;
+		  	return console.log(roi);
+	  	}
 	});
-  }
-};
+}
+
